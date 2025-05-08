@@ -53,8 +53,18 @@ const drawCircle = (e) => {
     0, // Starting angle (0 radians)
     2 * Math.PI // Ending angle (2π radians for a full circle)
   )
-  ctx.stroke() // Draw the circle's outline
   fillColor.checked ? ctx.fill() : ctx.stroke() // Fill the circle if the fill color checkbox is checked, otherwise just stroke
+}
+
+// Function to draw a triangle
+const drawTriangle = (e) => {
+  ctx.beginPath() // Begin a new path for the triangle
+  ctx.moveTo(prevMouseX, prevMouseY) // Move to the starting point of the triangle
+  ctx.lineTo(e.offsetX, e.offsetY) // Draw a line to the current mouse position
+  ctx.lineTo(prevMouseX * 2 - e.offsetX, e.offsetY) // Draw a line to the mirrored position on the X-axis
+  ctx.closePath() // Close the path to form a triangle
+  ctx.stroke() // Stroke the triangle outline
+  fillColor.checked ? ctx.fill() : ctx.stroke() // Fill the triangle if the fill color checkbox is checked, otherwise just stroke
 }
 
 // Function to start drawing
@@ -79,6 +89,8 @@ const drawing = (e) => {
     drawSquare(e) // Call the drawSquare function
   } else if (selectedTool === "circle") { // Check if the selected tool is the circle
     drawCircle(e) // Call the drawCircle function
+  } else {
+    drawTriangle(e) // Call the drawTriangle function
   }
 }
 
