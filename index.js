@@ -40,6 +40,23 @@ const drawSquare = (e) => {
   )
 }
 
+// Function to draw a circle
+const drawCircle = (e) => {
+  ctx.beginPath() // Begin a new path for the circle
+  let radius = Math.sqrt(
+    Math.pow((prevMouseX - e.offsetX), 2) + Math.pow((prevMouseY - e.offsetY), 2)
+  ) // Calculate the radius of the circle using the distance formula
+  ctx.arc(
+    prevMouseX, // X-coordinate of the circle's center
+    prevMouseY, // Y-coordinate of the circle's center
+    radius, // Radius of the circle
+    0, // Starting angle (0 radians)
+    2 * Math.PI // Ending angle (2π radians for a full circle)
+  )
+  ctx.stroke() // Draw the circle's outline
+  fillColor.checked ? ctx.fill() : ctx.stroke() // Fill the circle if the fill color checkbox is checked, otherwise just stroke
+}
+
 // Function to start drawing
 const startDrawing = (e) => {
   isDrawing = true // Set the drawing flag to true
@@ -60,6 +77,8 @@ const drawing = (e) => {
     ctx.stroke() // Render the line
   } else if (selectedTool === "square") { // Check if the selected tool is the square
     drawSquare(e) // Call the drawSquare function
+  } else if (selectedTool === "circle") { // Check if the selected tool is the circle
+    drawCircle(e) // Call the drawCircle function
   }
 }
 
