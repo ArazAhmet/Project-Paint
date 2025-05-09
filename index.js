@@ -89,7 +89,7 @@ const drawing = (e) => {
     drawSquare(e) // Call the drawSquare function
   } else if (selectedTool === "circle") { // Check if the selected tool is the circle
     drawCircle(e) // Call the drawCircle function
-  } else {
+  } else if (selectedTool === "triangle") { // Check if the selected tool is the triangle
     drawTriangle(e) // Call the drawTriangle function
   }
 }
