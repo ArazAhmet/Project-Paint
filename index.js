@@ -7,6 +7,8 @@ toolBtns = document.querySelectorAll(".tool") // Select all elements with the cl
 // Select the fill color checkbox
 fillColor = document.querySelector("#fill-color") // Select the fill color checkbox element
 
+sizeSlider = document.querySelector("#size-slider") // Select the size slider element
+
 // Get the 2D rendering context for the canvas
 ctx = canvas.getContext("2d") // Get the 2D rendering context for the canvas
 
@@ -103,6 +105,8 @@ toolBtns.forEach(btn => {
     console.log(selectedTool) // Log the selected tool to the console
   })
 })
+
+sizeSlider.addEventListener("change", () => brushWidth = sizeSlider.value) // Update the brush width based on the slider value
 
 // Add event listeners for mouse actions
 canvas.addEventListener("mousedown", startDrawing) // Start drawing on mouse down
