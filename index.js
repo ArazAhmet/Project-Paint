@@ -11,6 +11,8 @@ colorBtns = document.querySelectorAll(".colors .option") // Select all elements 
 
 colorPicker = document.querySelector("#color-picker") // Select the color picker element
 
+clearCanvas = document.querySelector(".clear-canvas") // Select the clear canvas button element
+
 // Get the 2D rendering context for the canvas
 ctx = canvas.getContext("2d") // Get the 2D rendering context for the canvas
 
@@ -89,7 +91,7 @@ const drawing = (e) => {
   if (!isDrawing) return // If not drawing, exit the function
   ctx.putImageData(snapshot, 0, 0) // Restore the canvas to the snapshot
 
-  if (selectedTool === "brush" || "eraser") { // Check if the selected tool is the brush or eraser
+  if (selectedTool === "brush" || selectedTool === "eraser") { // Check if the selected tool is the brush or eraser
     ctx.strokeStyle = selectedTool === "eraser" ? "#fff" : selectedColor // Set the stroke color based on the selected tool
     ctx.lineTo(e.offsetX, e.offsetY) // Draw a line to the current mouse position
     ctx.stroke() // Render the line
@@ -97,7 +99,7 @@ const drawing = (e) => {
     drawSquare(e) // Call the drawSquare function
   } else if (selectedTool === "circle") { // Check if the selected tool is the circle
     drawCircle(e) // Call the drawCircle function
-  } else (selectedTool === "triangle")
+  } else drawTriangle(e) // Call the drawTriangle function for the triangle tool
 }
 
 // Add event listeners to tool buttons
@@ -126,6 +128,10 @@ colorBtns.forEach(btn => {
 colorPicker.addEventListener("change", () => {
   colorPicker.parentElement.style.background = colorPicker.value // Update the background color of the color picker element
   colorPicker.parentElement.click() // Trigger a click event on the color picker element
+})
+
+clearCanvas.addEventListener("click", () => {
+  ctx.clearRect(0, 0, canvas.width, canvas.height) // Clear the entire canvas
 })
 
 // Add event listeners for mouse actions
