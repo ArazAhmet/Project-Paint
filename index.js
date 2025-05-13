@@ -13,6 +13,8 @@ colorPicker = document.querySelector("#color-picker") // Select the color picker
 
 clearCanvas = document.querySelector(".clear-canvas") // Select the clear canvas button element
 
+saveImg = document.querySelector(".save-img") // Select the save image button element
+
 // Get the 2D rendering context for the canvas
 ctx = canvas.getContext("2d") // Get the 2D rendering context for the canvas
 
@@ -23,10 +25,18 @@ selectedTool = "brush", // Default selected tool
 brushWidth = 5 // Set the default brush width
 selectedColor = "#000" // Set the default selected color
 
+const setCanvasBackground = () => {
+  // Set the canvas background color to white so the background is visible when the image is saved
+  ctx.fillStyle = "#fff"
+  ctx.fillRect(0, 0, canvas.width, canvas.height)
+  ctx.fillStyle = selectedColor
+}
+
 // Set canvas dimensions to match its offset dimensions when the window loads
 window.addEventListener("load", () => {
   canvas.width = canvas.offsetWidth // Set canvas width to match its offset width
   canvas.height = canvas.offsetHeight // Set canvas height to match its offset height
+  setCanvasBackground() // Set the canvas background color
 })
 
 // Function to draw a square
@@ -132,6 +142,15 @@ colorPicker.addEventListener("change", () => {
 
 clearCanvas.addEventListener("click", () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height) // Clear the entire canvas
+  setCanvasBackground() // Set the canvas background color
+})
+
+// Add event listener to the save image button
+saveImg.addEventListener("click", () => {
+  const link = document.createElement("a") // Creating <a> element
+  link.download = `${Date.now()}.jpg` // Set the download attribute with a timestamp
+  link.href = canvas.toDataURL() // Set the href attribute to the canvas data URL
+  link.click() // Trigger a click event on the link to download the image
 })
 
 // Add event listeners for mouse actions
