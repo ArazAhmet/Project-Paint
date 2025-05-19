@@ -1,0 +1,16 @@
+{
+  "name": "project",
+  "version": "1.0.0",
+  "description": "Detta är ditt projekts GitLab-projekt och här hittar du bland annat Wikin i vilken du ska dokumentera ditt projekt. Du hittar länk till din Wiki i menyn till vänster. Hej",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
