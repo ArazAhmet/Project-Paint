@@ -8,12 +8,21 @@
  * @param {CanvasRenderingContext2D} ctx - The canvas context
  */
 export function initCanvas(canvas, ctx) {
-  // Set canvas dimensions to match its offset dimensions
-  canvas.width = canvas.offsetWidth
-  canvas.height = canvas.offsetHeight
+  // Set canvas dimensions to match its container
+  resizeCanvas(canvas)
   
   // Set the canvas background
   setCanvasBackground(ctx, canvas)
+}
+
+/**
+ * Resize canvas to match its container
+ * @param {HTMLCanvasElement} canvas - The canvas element
+ */
+export function resizeCanvas(canvas) {
+  const container = canvas.parentElement
+  canvas.width = container.clientWidth
+  canvas.height = container.clientHeight
 }
 
 /**

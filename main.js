@@ -1,130 +1,169 @@
-// main.js
-// Main application file that imports tools and utilities and handles initialization
-
-import { 
-  drawSquare, drawCircle, drawTriangle, drawWithBrush 
-} from './tools.js'
-
-import { 
-  initCanvas, setCanvasBackground, clearCanvas, saveCanvasAsImage,
-  setupColorButtons, setupColorPicker, setupToolButtons, setupSizeSlider
-} from './utils.js'
-
-// Constants
-const DEFAULT_BRUSH_WIDTH = 5
-const DEFAULT_COLOR = "#000"
-const DEFAULT_TOOL = "brush"
-
-// DOM elements
+// Select the canvas element from the DOM
 const canvas = document.querySelector("canvas")
+
+// Select all tools
 const toolBtns = document.querySelectorAll(".tool")
 const fillColor = document.querySelector("#fill-color")
-const sizeSlider = document.querySelector("#size-slider")
 const colorBtns = document.querySelectorAll(".colors .option")
-const colorPicker = document.querySelector("#color-picker")
-const clearCanvasBtn = document.querySelector(".clear-canvas")
-const saveImgBtn = document.querySelector(".save-img")
+const clearCanvas = document.querySelector(".clear-canvas")
+const saveImg = document.querySelector(".save-img")
 
-// Initialize context
+// Get the 2D rendering context for the canvas
 const ctx = canvas.getContext("2d")
 
-// Application state
-let state = {
-  isDrawing: false,
-  selectedTool: DEFAULT_TOOL,
-  brushWidth: DEFAULT_BRUSH_WIDTH,
-  selectedColor: DEFAULT_COLOR,
-  prevMouseX: 0,
-  prevMouseY: 0,
-  snapshot: null
+// Initialize variables
+let prevMouseX, prevMouseY, snapshot
+let isDrawing = false
+let selectedTool = "brush"
+let brushWidth = 5
+let selectedColor = "#000" // Default to black
+
+// Set canvas background to white
+const setCanvasBackground = () => {
+  ctx.fillStyle = "#fff"
+  ctx.fillRect(0, 0, canvas.width, canvas.height)
+  ctx.fillStyle = selectedColor // Reset fillStyle to selected color
 }
 
-// Initialize the canvas when the window loads
+// Initialize canvas when window loads
 window.addEventListener("load", () => {
-  initCanvas(canvas, ctx)
+  // Set canvas dimensions
+  canvas.width = canvas.offsetWidth
+  canvas.height = canvas.offsetHeight
+  setCanvasBackground()
 })
 
-// Helper functions
-const updateSelectedTool = (tool) => {
-  state.selectedTool = tool
-  console.log(state.selectedTool)
+// Drawing functions
+
+// Draw rectangle
+const drawRect = (e) => {
+  if (!fillColor.checked) {
+    // Only stroke rectangle with border
+    return ctx.strokeRect(e.offsetX, e.offsetY, prevMouseX - e.offsetX, prevMouseY - e.offsetY)
+  }
+  // Draw filled rectangle
+  ctx.fillRect(e.offsetX, e.offsetY, prevMouseX - e.offsetX, prevMouseY - e.offsetY)
 }
 
-const updateBrushWidth = (width) => {
-  state.brushWidth = width
-}
-
-const updateSelectedColor = (color) => {
-  state.selectedColor = color
-}
-
-const setActiveColorClass = (element) => {
-  document.querySelector(".options .selected").classList.remove("selected")
-  element.classList.add("selected")
-}
-
-// Helper function to set active tool class
-function setActiveToolClass(element) {
-  document.querySelector(".options .active").classList.remove("active")
-  element.classList.add("active")
-}
-
-// Event handling functions
-function startDrawing(e) {
-  state.isDrawing = true
-  state.prevMouseX = e.offsetX
-  state.prevMouseY = e.offsetY
+// Draw circle
+const drawCircle = (e) => {
   ctx.beginPath()
-  ctx.lineWidth = state.brushWidth
-  ctx.strokeStyle = state.selectedColor
-  ctx.fillStyle = state.selectedColor
-  
-  // Take a snapshot of the canvas
-  state.snapshot = ctx.getImageData(0, 0, canvas.width, canvas.height)
+  let radius = Math.sqrt(Math.pow((prevMouseX - e.offsetX), 2) + Math.pow((prevMouseY - e.offsetY), 2))
+  ctx.arc(prevMouseX, prevMouseY, radius, 0, 2 * Math.PI)
+  fillColor.checked ? ctx.fill() : ctx.stroke()
 }
 
-function drawing(e) {
-  if (!state.isDrawing) return
-  
-  // Restore the canvas to the snapshot
-  ctx.putImageData(state.snapshot, 0, 0)
+// Draw triangle
+const drawTriangle = (e) => {
+  ctx.beginPath()
+  ctx.moveTo(prevMouseX, prevMouseY)
+  ctx.lineTo(e.offsetX, e.offsetY)
+  ctx.lineTo(prevMouseX * 2 - e.offsetX, e.offsetY)
+  ctx.closePath()
+  fillColor.checked ? ctx.fill() : ctx.stroke()
+}
 
-  // Handle different drawing tools
-  if (state.selectedTool === "brush" || state.selectedTool === "eraser") {
-    drawWithBrush(ctx, e, state.selectedTool, state.selectedColor)
-  } else if (state.selectedTool === "square") {
-    drawSquare(ctx, e, state.prevMouseX, state.prevMouseY, fillColor.checked)
-  } else if (state.selectedTool === "circle") {
-    drawCircle(ctx, e, state.prevMouseX, state.prevMouseY, fillColor.checked)
-  } else if (state.selectedTool === "triangle") {
-    drawTriangle(ctx, e, state.prevMouseX, state.prevMouseY, fillColor.checked)
+// Start drawing
+const startDraw = (e) => {
+  isDrawing = true
+  prevMouseX = e.offsetX
+  prevMouseY = e.offsetY
+  ctx.beginPath() // Begin a new path
+  ctx.lineWidth = brushWidth
+  ctx.strokeStyle = selectedColor // Set line color to selected color
+  ctx.fillStyle = selectedColor // Set fill color to selected color
+  // Take snapshot of current canvas state
+  snapshot = ctx.getImageData(0, 0, canvas.width, canvas.height)
+}
+
+// Drawing
+const drawing = (e) => {
+  if (!isDrawing) return
+  
+  // Restore snapshot to avoid drawing over previous drawing
+  ctx.putImageData(snapshot, 0, 0)
+
+  if (selectedTool === "brush" || selectedTool === "eraser") {
+    ctx.strokeStyle = selectedTool === "eraser" ? "#fff" : selectedColor
+    ctx.lineTo(e.offsetX, e.offsetY)
+    ctx.stroke()
+  } else if (selectedTool === "square") {
+    drawRect(e)
+  } else if (selectedTool === "circle") {
+    drawCircle(e)
+  } else {
+    drawTriangle(e)
   }
 }
 
-function stopDrawing() {
-  state.isDrawing = false
-}
-
-// Set up tools
-setupToolButtons(toolBtns, setActiveToolClass, updateSelectedTool)
-setupSizeSlider(sizeSlider, updateBrushWidth)
-
-// Set up colors
-setupColorButtons(colorBtns, setActiveColorClass, updateSelectedColor)
-setupColorPicker(colorPicker, (color) => {
-  colorPicker.parentElement.style.background = color
-}, () => colorPicker.parentElement.click())
-
-// Button event listeners
-clearCanvasBtn.addEventListener("click", () => {
-  clearCanvas(ctx, canvas, state.selectedColor)
+// Tool selection
+toolBtns.forEach(btn => {
+  btn.addEventListener("click", () => {
+    // Remove active class from current tool
+    document.querySelector(".options .active").classList.remove("active")
+    btn.classList.add("active")
+    selectedTool = btn.id
+    console.log("Selected tool:", selectedTool)
+  })
 })
 
-saveImgBtn.addEventListener("click", () => {
-  saveCanvasAsImage(canvas)
+// Color buttons
+colorBtns.forEach(btn => {
+  btn.addEventListener("click", () => {
+    // Remove selected class from current color
+    document.querySelector(".options .selected").classList.remove("selected")
+    btn.classList.add("selected")
+    
+    // Extract background color from the selected color button
+    selectedColor = window.getComputedStyle(btn).getPropertyValue("background-color")
+    console.log("Selected color:", selectedColor)
+  })
+})
+
+// Clear canvas
+clearCanvas.addEventListener("click", () => {
+  ctx.clearRect(0, 0, canvas.width, canvas.height)
+  setCanvasBackground()
+})
+
+// Save image
+saveImg.addEventListener("click", () => {
+  const link = document.createElement("a")
+  link.download = `${Date.now()}.jpg`
+  link.href = canvas.toDataURL()
+  link.click()
 })
 
 // Canvas event listeners
-canvas.addEventListener("mousedown", startDrawing)
+canvas.addEventListener("mousedown", startDraw)
 canvas.addEventListener("mousemove", drawing)
-canvas.addEventListener("mouseup", stopDrawing)
+canvas.addEventListener("mouseup", () => isDrawing = false)
+
+// Add touch support for mobile devices
+canvas.addEventListener("touchstart", (e) => {
+  e.preventDefault() // Prevent scrolling
+  const touch = e.touches[0]
+  const mouseEvent = new MouseEvent("mousedown", {
+    clientX: touch.clientX,
+    clientY: touch.clientY
+  })
+  canvas.dispatchEvent(mouseEvent)
+})
+
+canvas.addEventListener("touchmove", (e) => {
+  e.preventDefault() // Prevent scrolling
+  const touch = e.touches[0]
+  const mouseEvent = new MouseEvent("mousemove", {
+    clientX: touch.clientX,
+    clientY: touch.clientY
+  })
+  canvas.dispatchEvent(mouseEvent)
+})
+
+canvas.addEventListener("touchend", () => {
+  const mouseEvent = new MouseEvent("mouseup", {})
+  canvas.dispatchEvent(mouseEvent)
+})
+
+// Add logging to debug color selection
+console.log("Initial color:", selectedColor)
