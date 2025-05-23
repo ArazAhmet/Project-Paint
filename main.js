@@ -5,6 +5,7 @@ const canvas = document.querySelector("canvas")
 const toolBtns = document.querySelectorAll(".tool")
 const fillColor = document.querySelector("#fill-color")
 const colorBtns = document.querySelectorAll(".colors .option")
+const sizeSlider = document.querySelector("#size-slider")
 const clearCanvas = document.querySelector(".clear-canvas")
 const saveImg = document.querySelector(".save-img")
 
@@ -25,12 +26,58 @@ const setCanvasBackground = () => {
   ctx.fillStyle = selectedColor // Reset fillStyle to selected color
 }
 
+// Save canvas data to localStorage
+const saveCanvasData = () => {
+  try {
+    const canvasData = canvas.toDataURL()
+    localStorage.setItem('paintAppCanvas', canvasData)
+    console.log('Canvas data saved')
+  } catch (error) {
+    console.error('Failed to save canvas data:', error)
+  }
+}
+
+// Load canvas data from localStorage
+const loadCanvasData = () => {
+  try {
+    const savedData = localStorage.getItem('paintAppCanvas')
+    if (savedData) {
+      const img = new Image()
+      img.onload = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        ctx.drawImage(img, 0, 0)
+        console.log('Canvas data loaded')
+      }
+      img.src = savedData
+    }
+  } catch (error) {
+    console.error('Failed to load canvas data:', error)
+  }
+}
+
+// Clear saved canvas data from localStorage
+const clearSavedData = () => {
+  try {
+    localStorage.removeItem('paintAppCanvas')
+    console.log('Saved canvas data cleared')
+  } catch (error) {
+    console.error('Failed to clear saved data:', error)
+  }
+}
+
 // Initialize canvas when window loads
 window.addEventListener("load", () => {
   // Set canvas dimensions
   canvas.width = canvas.offsetWidth
   canvas.height = canvas.offsetHeight
   setCanvasBackground()
+  
+  // Initialize brush width from slider's current value
+  brushWidth = parseInt(sizeSlider.value)
+  console.log("Initial brush width set to:", brushWidth)
+  
+  // Load saved canvas data
+  loadCanvasData()
 })
 
 // Drawing functions
@@ -107,6 +154,12 @@ toolBtns.forEach(btn => {
   })
 })
 
+// Size slider functionality
+sizeSlider.addEventListener("input", () => {
+  brushWidth = parseInt(sizeSlider.value)
+  console.log("Brush width changed to:", brushWidth)
+})
+
 // Color buttons
 colorBtns.forEach(btn => {
   btn.addEventListener("click", () => {
@@ -124,6 +177,8 @@ colorBtns.forEach(btn => {
 clearCanvas.addEventListener("click", () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
   setCanvasBackground()
+  // Clear saved data when clearing canvas
+  clearSavedData()
 })
 
 // Save image
@@ -137,7 +192,31 @@ saveImg.addEventListener("click", () => {
 // Canvas event listeners
 canvas.addEventListener("mousedown", startDraw)
 canvas.addEventListener("mousemove", drawing)
-canvas.addEventListener("mouseup", () => isDrawing = false)
+canvas.addEventListener("mouseup", () => {
+  isDrawing = false
+  // Save canvas data after drawing
+  if (prevMouseX !== undefined && prevMouseY !== undefined) {
+    saveCanvasData()
+  }
+})
+
+// Stop drawing when mouse leaves canvas
+canvas.addEventListener("mouseleave", () => {
+  isDrawing = false
+  // Save canvas data when mouse leaves while drawing
+  if (prevMouseX !== undefined && prevMouseY !== undefined) {
+    saveCanvasData()
+  }
+})
+
+// Also listen for mouseup on the entire document to catch mouseup outside canvas
+document.addEventListener("mouseup", () => {
+  if (isDrawing) {
+    isDrawing = false
+    // Save canvas data when mouse up outside canvas
+    saveCanvasData()
+  }
+})
 
 // Add touch support for mobile devices
 canvas.addEventListener("touchstart", (e) => {

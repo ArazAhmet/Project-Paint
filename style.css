@@ -62,7 +62,6 @@ section {
   align-items: center;
 }
 
-/* Add icons to titles */
 .row:first-child .title::before {
   content: "◼";
   margin-right: 5px;
@@ -96,7 +95,6 @@ section {
   transition: all 0.2s ease;
 }
 
-/* Regular options (not colors) hover effect */
 .row:not(.colors) .options .option:hover {
   background-color: #f0f0f0;
 }
@@ -143,15 +141,6 @@ section {
   border-color: #4A98F7;
 }
 
-.option #fill-color:checked::before {
-  content: '✓';
-  position: absolute;
-  color: white;
-  font-size: 8px;
-  font-weight: bold;
-  top: -2px;
-  left: 1px;
-}
 
 #fill-color:checked ~ label {
   color: #4A98F7;
