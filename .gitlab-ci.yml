@@ -1,3 +1,5 @@
+# Simple GitLab CI/CD Pipeline for Paint Application
+
 # Define stages
 stages:
   - test
@@ -26,7 +28,7 @@ test:
   only:
     - branches
 
-# Deploy to GitLab Pages (optional)
+# Deploy to GitLab Pages
 pages:
   stage: deploy
   image: alpine:latest
@@ -36,8 +38,12 @@ pages:
     - cp index.html public/
     - cp style.css public/
     - cp main.js public/
-    - cp tools.js public/
-    - cp utils.js public/
+    - cp canvas.js public/
+    - cp drawing.js public/
+    - cp shapes.js public/
+    - cp ui.js public/
+    - cp undoRedo.js public/
+    - cp storage.js public/
     - cp -r icons public/ 2>/dev/null || echo "No icons folder found, skipping..."
     - echo "Files ready for GitLab Pages"
   artifacts:
@@ -47,14 +53,3 @@ pages:
   only:
     - main
     - master
-
-# Optional: Lint stage (if you want to add linting)
-# lint:
-#   stage: test
-#   image: node:18-alpine
-#   script:
-#     - npm ci
-#     - npx eslint *.js
-#   allow_failure: true
-#   only:
-#     - branches
