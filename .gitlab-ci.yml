@@ -3,6 +3,7 @@
 # Define stages
 stages:
   - test
+  - build
   - deploy
 
 # Cache node_modules for faster builds
@@ -28,24 +29,44 @@ test:
   only:
     - branches
 
+# Build stage - Prepare application files
+build:
+  stage: build
+  image: alpine:latest
+  script:
+    - echo "Building application..."
+    - mkdir dist
+    - cp index.html dist/
+    - cp style.css dist/
+    - cp main.js dist/
+    - cp canvas.js dist/
+    - cp drawing.js dist/
+    - cp shapes.js dist/
+    - cp ui.js dist/
+    - cp undoRedo.js dist/
+    - cp storage.js dist/
+    - cp -r icons dist/ 2>/dev/null || echo "No icons folder found, skipping..."
+    - echo "Build completed successfully"
+    - ls -la dist/
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 week
+  only:
+    - branches
+
 # Deploy to GitLab Pages
 pages:
   stage: deploy
   image: alpine:latest
+  dependencies:
+    - build
   script:
-    - echo "Preparing files for deployment..."
+    - echo "Deploying to GitLab Pages..."
     - mkdir public
-    - cp index.html public/
-    - cp style.css public/
-    - cp main.js public/
-    - cp canvas.js public/
-    - cp drawing.js public/
-    - cp shapes.js public/
-    - cp ui.js public/
-    - cp undoRedo.js public/
-    - cp storage.js public/
-    - cp -r icons public/ 2>/dev/null || echo "No icons folder found, skipping..."
-    - echo "Files ready for GitLab Pages"
+    - cp -r dist/* public/
+    - echo "Deployment ready"
+    - ls -la public/
   artifacts:
     paths:
       - public
