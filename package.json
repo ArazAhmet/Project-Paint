@@ -1,16 +1,22 @@
 {
   "name": "project",
   "version": "1.0.0",
-  "description": "Detta är ditt projekts GitLab-projekt och här hittar du bland annat Wikin i vilken du ska dokumentera ditt projekt. Du hittar länk till din Wiki i menyn till vänster. Hej",
+  "description": "Araz Paint WebApplication",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "test": "jest --coverage --ci --testResultsProcessor=jest-junit",
+    "test:watch": "jest --watch",
+    "test:local": "jest"
   },
-  "keywords": [],
+  "keywords": [
+    "paint",
+    "canvas",
+    "drawing"
+  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "jest": "^29.7.0"
+    "jest": "^29.7.0",
+    "jest-junit": "^16.0.0"
   }
 }

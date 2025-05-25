@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="3" failures="0" errors="0" time="0.35">
+  <testsuite name="Paint App Basic Tests" errors="0" failures="0" skipped="0" timestamp="2025-05-25T21:14:11" time="0.273" tests="3">
+    <testcase classname="Paint App Basic Tests default brush width ska vara 5" name="Paint App Basic Tests default brush width ska vara 5" time="0.002">
+    </testcase>
+    <testcase classname="Paint App Basic Tests default färg ska vara svart" name="Paint App Basic Tests default färg ska vara svart" time="0">
+    </testcase>
+    <testcase classname="Paint App Basic Tests default verktyg ska vara brush" name="Paint App Basic Tests default verktyg ska vara brush" time="0">
+    </testcase>
+  </testsuite>
+</testsuites>

@@ -1,0 +1,60 @@
+# Define stages
+stages:
+  - test
+  - deploy
+
+# Cache node_modules for faster builds
+cache:
+  paths:
+    - node_modules/
+
+# Test stage - Run Jest tests
+test:
+  stage: test
+  image: node:18-alpine
+  script:
+    - echo "Installing dependencies..."
+    - npm ci
+    - echo "Running tests..."
+    - npm test
+  artifacts:
+    reports:
+      junit: junit.xml
+    paths:
+      - coverage/
+    expire_in: 1 week
+  only:
+    - branches
+
+# Deploy to GitLab Pages (optional)
+pages:
+  stage: deploy
+  image: alpine:latest
+  script:
+    - echo "Preparing files for deployment..."
+    - mkdir public
+    - cp index.html public/
+    - cp style.css public/
+    - cp main.js public/
+    - cp tools.js public/
+    - cp utils.js public/
+    - cp -r icons public/ 2>/dev/null || echo "No icons folder found, skipping..."
+    - echo "Files ready for GitLab Pages"
+  artifacts:
+    paths:
+      - public
+    expire_in: 1 week
+  only:
+    - main
+    - master
+
+# Optional: Lint stage (if you want to add linting)
+# lint:
+#   stage: test
+#   image: node:18-alpine
+#   script:
+#     - npm ci
+#     - npx eslint *.js
+#   allow_failure: true
+#   only:
+#     - branches
