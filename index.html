@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Araz Paint WebbApplication</title>
   <link rel="stylesheet" href="style.css">
-  <script src="main.js" defer></script>
+  <script type="module" src="main.js" defer></script>
 </head>
 
 <body>
@@ -56,11 +56,30 @@
         </ul>
       </div>
 
+      <div class="row">
+        <label class="title">Actions</label>
+        <ul class="options">
+          <li class="option" id="undo-btn">
+            <img src="icons/undo.png" alt="">
+            <span>Undo</span>
+          </li>
+
+          <li class="option" id="redo-btn">
+            <img src="icons/redo.png" alt="">
+            <span>Redo</span>
+          </li>
+        </ul>
+      </div>
+
       <div class="row colors">
         <label class="title">Colors</label>
         <ul class="options">
           <li class="option"></li>
           <li class="option selected"></li>
+          <li class="option"></li>
+          <li class="option"></li>
+          <li class="option"></li>
+          <li class="option"></li>
           <li class="option"></li>
           <li class="option"></li>
           <li class="option"></li>
