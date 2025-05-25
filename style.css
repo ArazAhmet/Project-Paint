@@ -75,6 +75,12 @@ section {
 }
 
 .row:nth-child(3) .title::before {
+  content: "↩️";
+  margin-right: 5px;
+  font-size: 12px;
+}
+
+.row:nth-child(4) .title::before {
   content: "🎨";
   margin-right: 5px;
   font-size: 12px;
@@ -124,6 +130,28 @@ section {
 
 .option.active {
   background-color: #e6f2ff;
+}
+
+#undo-btn, #redo-btn {
+  opacity: 1;
+  cursor: pointer;
+}
+
+#undo-btn:hover, #redo-btn:hover {
+  background-color: #f0f0f0;
+}
+
+#undo-btn img, #redo-btn img {
+  transition: all 0.2s ease;
+}
+
+#undo-btn:hover img, #redo-btn:hover img {
+  filter: invert(17%) sepia(90%) saturate(3000%) hue-rotate(900deg) brightness(100%) contrast(100%);
+}
+
+#undo-btn:hover span, #redo-btn:hover span {
+  color: #4A98F7;
+  font-weight: 500;
 }
 
 .option #fill-color {
@@ -415,14 +443,16 @@ section {
   }
   
   .row:first-child .options,
-  .row:nth-child(2) .options {
+  .row:nth-child(2) .options,
+  .row:nth-child(3) .options {
     display: flex;
     flex-wrap: wrap;
     gap: 4px;
   }
   
   .row:first-child .option,
-  .row:nth-child(2) .option {
+  .row:nth-child(2) .option,
+  .row:nth-child(3) .option {
     flex: 1;
     min-width: 70px;
     justify-content: center;
