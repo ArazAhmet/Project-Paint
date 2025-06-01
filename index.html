@@ -4,28 +4,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Araz Paint WebbApplication</title>
+  <title>Araz Paint WebApplication</title>
   <link rel="stylesheet" href="style.css">
   <script type="module" src="main.js" defer></script>
 </head>
 
 <body>
+  <h1 style="position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden;">Araz Paint WebApplication
+  </h1>
+
   <div class="container">
-    <section class="tools-board">
+    <section class="tools-board" role="complementary" aria-label="Drawing tools">
       <div class="row">
         <label class="title">Shapes</label>
         <ul class="options">
-          <li class="option tool" id="square">
+          <li class="option tool" id="square" role="button" tabindex="0" aria-label="Square shape tool">
             <img src="icons/square.svg" alt="">
             <span>Square</span>
           </li>
 
-          <li class="option tool" id="circle">
+          <li class="option tool" id="circle" role="button" tabindex="0" aria-label="Circle shape tool">
             <img src="icons/circle.svg" alt="">
             <span>Circle</span>
           </li>
 
-          <li class="option tool" id="triangle">
+          <li class="option tool" id="triangle" role="button" tabindex="0" aria-label="Triangle shape tool">
             <img src="icons/triangle.svg" alt="">
             <span>Triangle</span>
           </li>
@@ -40,18 +43,18 @@
       <div class="row">
         <label class="title">Options</label>
         <ul class="options">
-          <li class="option active tool" id="brush">
+          <li class="option active tool" id="brush" role="button" tabindex="0" aria-label="Brush tool">
             <img src="icons/brush.svg" alt="">
             <span>Brush</span>
           </li>
 
-          <li class="option tool" id="eraser">
+          <li class="option tool" id="eraser" role="button" tabindex="0" aria-label="Eraser tool">
             <img src="icons/eraser.svg" alt="">
             <span>Eraser</span>
           </li>
 
           <li class="option">
-            <input type="range" id="size-slider" min="1" max="30" value="5">
+            <input type="range" id="size-slider" min="1" max="30" value="5" aria-label="Brush size">
           </li>
         </ul>
       </div>
@@ -59,12 +62,12 @@
       <div class="row">
         <label class="title">Actions</label>
         <ul class="options">
-          <li class="option" id="undo-btn">
+          <li class="option" id="undo-btn" role="button" tabindex="0" aria-label="Undo">
             <img src="icons/undo.png" alt="">
             <span>Undo</span>
           </li>
 
-          <li class="option" id="redo-btn">
+          <li class="option" id="redo-btn" role="button" tabindex="0" aria-label="Redo">
             <img src="icons/redo.png" alt="">
             <span>Redo</span>
           </li>
@@ -74,15 +77,15 @@
       <div class="row colors">
         <label class="title">Colors</label>
         <ul class="options">
-          <li class="option"></li>
-          <li class="option selected"></li>
-          <li class="option"></li>
-          <li class="option"></li>
-          <li class="option"></li>
-          <li class="option"></li>
-          <li class="option"></li>
-          <li class="option"></li>
-          <li class="option"></li>
+          <li class="option" role="button" tabindex="0" aria-label="White color"></li>
+          <li class="option selected" role="button" tabindex="0" aria-label="Black color"></li>
+          <li class="option" role="button" tabindex="0" aria-label="Red color"></li>
+          <li class="option" role="button" tabindex="0" aria-label="Green color"></li>
+          <li class="option" role="button" tabindex="0" aria-label="Blue color"></li>
+          <li class="option" role="button" tabindex="0" aria-label="Orange color"></li>
+          <li class="option" role="button" tabindex="0" aria-label="Purple color"></li>
+          <li class="option" role="button" tabindex="0" aria-label="Yellow color"></li>
+          <li class="option" role="button" tabindex="0" aria-label="Teal color"></li>
         </ul>
       </div>
 
@@ -91,10 +94,10 @@
         <button class="save-img">Save As Image</button>
       </div>
     </section>
-    <section class="drawing-board">
-      <canvas></canvas>
-    </section>
 
+    <section class="drawing-board" role="main">
+      <canvas aria-label="Drawing canvas"></canvas>
+    </section>
   </div>
 
 </body>

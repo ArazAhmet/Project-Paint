@@ -582,3 +582,10 @@ section {
     margin-bottom: 6px;
   }
 }
+
+.option[role="button"]:focus,
+button:focus,
+input:focus {
+  outline: 2px solid #4A98F7;
+  outline-offset: 2px;
+}
